@@ -1,0 +1,60 @@
+2025-12-29 11:08:08.635  INFO 16300 --- [restartedMain] com.mbti.BackendApplication              : Starting BackendApplication using Java 21.0.7 with PID 16300 (E:\fullstack_yeonhee\MBTI\backend\build\classes\java\main started by TJ in E:\fullstack_yeonhee\MBTI\backend)
+2025-12-29 11:08:08.637  INFO 16300 --- [restartedMain] com.mbti.BackendApplication              : No active profile set, falling back to 1 default profile: "default"
+2025-12-29 11:08:08.686  INFO 16300 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-12-29 11:08:08.686  INFO 16300 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-12-29 11:08:10.477  INFO 16300 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-12-29 11:08:10.497  INFO 16300 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-29 11:08:10.497  INFO 16300 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-12-29 11:08:10.551  INFO 16300 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-29 11:08:10.551  INFO 16300 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1864 ms
+2025-12-29 11:08:10.648  WARN 16300 --- [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mbtiController' defined in file [E:\fullstack_yeonhee\MBTI\backend\build\classes\java\main\com\mbti\mbti\controller\MbtiController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'mbtiServiceImpl' defined in file [E:\fullstack_yeonhee\MBTI\backend\build\classes\java\main\com\mbti\mbti\service\MbtiServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'questionMapper' defined in file [E:\fullstack_yeonhee\MBTI\backend\build\classes\java\main\com\mbti\question\mapper\QuestionMapper.class]: Cannot resolve reference to bean 'sqlSessionTemplate' while setting bean property 'sqlSessionTemplate'
+2025-12-29 11:08:10.651  INFO 16300 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-12-29 11:08:10.665  INFO 16300 --- [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-12-29 11:08:10.687 ERROR 16300 --- [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+Reason: Failed to determine a suitable driver class
+
+
+Action:
+
+Consider the following:
+	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).
+
+2025-12-29 11:09:04.936  INFO 18940 --- [restartedMain] com.mbti.BackendApplication              : Starting BackendApplication using Java 21.0.7 with PID 18940 (E:\fullstack_yeonhee\MBTI\backend\build\classes\java\main started by TJ in E:\fullstack_yeonhee\MBTI\backend)
+2025-12-29 11:09:04.938  INFO 18940 --- [restartedMain] com.mbti.BackendApplication              : No active profile set, falling back to 1 default profile: "default"
+2025-12-29 11:09:04.988  INFO 18940 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-12-29 11:09:04.988  INFO 18940 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-12-29 11:09:06.362  INFO 18940 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-12-29 11:09:06.372  INFO 18940 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-29 11:09:06.373  INFO 18940 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-12-29 11:09:06.423  INFO 18940 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-29 11:09:06.423  INFO 18940 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1434 ms
+2025-12-29 11:09:07.506  WARN 18940 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
+2025-12-29 11:09:07.540  INFO 18940 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-12-29 11:09:07.548  INFO 18940 --- [restartedMain] com.mbti.BackendApplication              : Started BackendApplication in 3.118 seconds (process running for 4.988)
+2025-12-29 11:09:30.370  INFO 18940 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-29 11:09:30.370  INFO 18940 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-12-29 11:09:30.371  INFO 18940 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-12-29 11:09:47.314  INFO 18940 --- [http-nio-8080-exec-4] com.mbti.common.aop.LoggingAspect        : [MbtiController.getAllQuestions()] 요청 / ip : 0:0:0:0:0:0:0:1
+2025-12-29 11:09:47.314  INFO 18940 --- [http-nio-8080-exec-4] c.mbti.mbti.controller.MbtiController    : GET /api/mbti/questions - Fetching all questions
+2025-12-29 11:09:47.315  INFO 18940 --- [http-nio-8080-exec-4] com.mbti.common.aop.LoggingAspect        : ========== MbtiServiceImpl.getAllQuestions() 서비스 호출 ==========
+2025-12-29 11:09:47.318  INFO 18940 --- [http-nio-8080-exec-4] com.mbti.common.aop.LoggingAspect        : Parameter : []
+2025-12-29 11:09:47.318  INFO 18940 --- [http-nio-8080-exec-4] com.mbti.mbti.service.MbtiServiceImpl    : Fetching all questions
+2025-12-29 11:09:47.336  INFO 18940 --- [http-nio-8080-exec-4] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Starting...
+2025-12-29 11:09:47.519  INFO 18940 --- [http-nio-8080-exec-4] com.zaxxer.hikari.pool.HikariPool        : MyHikariCP - Added connection org.postgresql.jdbc.PgConnection@2339dd1d
+2025-12-29 11:09:47.521  INFO 18940 --- [http-nio-8080-exec-4] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Start completed.
+2025-12-29 11:09:47.563  INFO 18940 --- [http-nio-8080-exec-4] com.mbti.common.aop.LoggingAspect        : Running Time : 245ms
+2025-12-29 11:09:47.563  INFO 18940 --- [http-nio-8080-exec-4] com.mbti.common.aop.LoggingAspect        : ===================================================================================
+2025-12-29 15:26:21.755  INFO 18940 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Shutdown initiated...
+2025-12-29 15:26:21.777  INFO 18940 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Shutdown completed.
