@@ -85,7 +85,15 @@ class _TestScreenState extends State<TestScreen> {
   void submitTest() async {
     try {
       final result = await ApiService.submitTest(widget.userName, answers);
-      
+
+      // mounted : 화면이 존재한다면과 같은 기능
+      if(mounted) {
+        context.go("/result", extra: {
+          'userName' : widget.userName,
+          'resultType' : result['resultType']
+        });
+      }
+      /*
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -101,6 +109,7 @@ class _TestScreenState extends State<TestScreen> {
             ],
           )
       );
+       */
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("제출 실패했습니다."))
