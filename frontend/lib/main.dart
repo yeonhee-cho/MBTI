@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/constants.dart';
 import 'package:frontend/screens/home/home_screen.dart';
+import 'package:frontend/screens/result/result_screen.dart';
 import 'package:frontend/screens/test/test_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,6 +30,15 @@ final GoRouter _router = GoRouter(
         * */
         return TestScreen(userName: userName);
       }
+    ),
+
+    // 결과 화면
+    GoRoute(
+        path:'/result',
+        builder: (context, state) {
+          final data = state.extra as Map<String, String>;
+          return ResultScreen(userName : data['userName']!,resultType: data['resultType']!);
+        }
     )
   ]
 );

@@ -69,8 +69,9 @@ class _TestScreenState extends State<TestScreen> {
       if(currentQuestion < questions.length -1 ) {
         currentQuestion++;// 다음 질문으로 넘어가고
       } else {
+        submitTest();
         // 결과 화면으로 이동처리
-        _showResult();
+        // _showResult();
         // 잠시 결과 화면을 보여주는 함수 호출
         // screens 에 /result/result_screen 명칭으로
         // 폴더와 파일 생성 후, main router 설정해준다음
@@ -111,7 +112,8 @@ class _TestScreenState extends State<TestScreen> {
   // 함수 호출을 이용하여 임시적으로 결과에 대한 창을 띄울 수 있다.
   // _showResult = private 형태로 외부에서 사용할 수 없는 함수
   void _showResult(){
-    showDialog(context: context,
+    showDialog(
+        context: context,
         builder: (context) => AlertDialog (
           title: Text('검사완료'),
           content: Text(
@@ -151,6 +153,7 @@ class _TestScreenState extends State<TestScreen> {
     // 임시로 2문제만 있으므로 인덱스 처리를 잠시 하는 것이고 
     // 나중에는 삭제할 코드들
     int questionIndex = currentQuestion - 1;
+
     if(questionIndex >= questions.length) {
       questionIndex = questions.length - 1;
     }

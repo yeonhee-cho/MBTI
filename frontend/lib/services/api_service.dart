@@ -43,7 +43,7 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'userName': userName,
-        'answer' : answerList
+        'answers' : answerList
       })
     );
 
