@@ -36,8 +36,11 @@ final GoRouter _router = GoRouter(
     GoRoute(
         path:'/result',
         builder: (context, state) {
-          final data = state.extra as Map<String, String>;
-          return ResultScreen(userName : data['userName']!,resultType: data['resultType']!);
+          final data = state.extra as Map<String, dynamic>;
+          return ResultScreen(
+              userName : data['userName']!,
+              resultType: data['resultType']!
+          );
         }
     )
   ]
