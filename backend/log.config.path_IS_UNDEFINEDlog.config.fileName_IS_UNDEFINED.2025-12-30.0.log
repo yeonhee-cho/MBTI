@@ -1,0 +1,53 @@
+2025-12-30 10:38:11.701  INFO 19708 --- [restartedMain] com.mbti.BackendApplication              : Starting BackendApplication using Java 21.0.7 with PID 19708 (E:\fullstack_yeonhee\MBTI\backend\build\classes\java\main started by TJ in E:\fullstack_yeonhee\MBTI\backend)
+2025-12-30 10:38:11.703  INFO 19708 --- [restartedMain] com.mbti.BackendApplication              : No active profile set, falling back to 1 default profile: "default"
+2025-12-30 10:38:11.752  INFO 19708 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-12-30 10:38:11.752  INFO 19708 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-12-30 10:38:13.315  INFO 19708 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-12-30 10:38:13.327  INFO 19708 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-30 10:38:13.328  INFO 19708 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-12-30 10:38:13.379  INFO 19708 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-30 10:38:13.380  INFO 19708 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1626 ms
+2025-12-30 10:38:14.540  INFO 19708 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-12-30 10:38:14.581  INFO 19708 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-12-30 10:38:14.588  INFO 19708 --- [restartedMain] com.mbti.BackendApplication              : Started BackendApplication in 4.619 seconds (process running for 9.773)
+2025-12-30 10:40:18.271  INFO 19708 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-12-30 10:40:18.272  INFO 19708 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-12-30 10:40:18.273  INFO 19708 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-12-30 10:40:18.304  INFO 19708 --- [http-nio-8080-exec-1] com.mbti.common.aop.LoggingAspect        : [MbtiController.getAllQuestions()] 요청 / ip : 127.0.0.1
+2025-12-30 10:40:18.304  INFO 19708 --- [http-nio-8080-exec-1] c.mbti.mbti.controller.MbtiController    : GET /api/mbti/questions - Fetching all questions
+2025-12-30 10:40:18.304  INFO 19708 --- [http-nio-8080-exec-1] com.mbti.common.aop.LoggingAspect        : ========== MbtiServiceImpl.getAllQuestions() 서비스 호출 ==========
+2025-12-30 10:40:18.306  INFO 19708 --- [http-nio-8080-exec-1] com.mbti.common.aop.LoggingAspect        : Parameter : []
+2025-12-30 10:40:18.307  INFO 19708 --- [http-nio-8080-exec-1] com.mbti.mbti.service.MbtiServiceImpl    : Fetching all questions
+2025-12-30 10:40:18.324  INFO 19708 --- [http-nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Starting...
+2025-12-30 10:40:18.554  INFO 19708 --- [http-nio-8080-exec-1] com.zaxxer.hikari.pool.HikariPool        : MyHikariCP - Added connection org.postgresql.jdbc.PgConnection@744fe02f
+2025-12-30 10:40:18.556  INFO 19708 --- [http-nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : MyHikariCP - Start completed.
+2025-12-30 10:40:18.605  INFO 19708 --- [http-nio-8080-exec-1] com.mbti.common.aop.LoggingAspect        : Running Time : 299ms
+2025-12-30 10:40:18.605  INFO 19708 --- [http-nio-8080-exec-1] com.mbti.common.aop.LoggingAspect        : ===================================================================================
+2025-12-30 10:42:53.860  INFO 19708 --- [http-nio-8080-exec-3] com.mbti.common.aop.LoggingAspect        : [MbtiController.getAllQuestions()] 요청 / ip : 127.0.0.1
+2025-12-30 10:42:53.861  INFO 19708 --- [http-nio-8080-exec-3] c.mbti.mbti.controller.MbtiController    : GET /api/mbti/questions - Fetching all questions
+2025-12-30 10:42:53.861  INFO 19708 --- [http-nio-8080-exec-3] com.mbti.common.aop.LoggingAspect        : ========== MbtiServiceImpl.getAllQuestions() 서비스 호출 ==========
+2025-12-30 10:42:53.861  INFO 19708 --- [http-nio-8080-exec-3] com.mbti.common.aop.LoggingAspect        : Parameter : []
+2025-12-30 10:42:53.861  INFO 19708 --- [http-nio-8080-exec-3] com.mbti.mbti.service.MbtiServiceImpl    : Fetching all questions
+2025-12-30 10:42:53.863  INFO 19708 --- [http-nio-8080-exec-3] com.mbti.common.aop.LoggingAspect        : Running Time : 2ms
+2025-12-30 10:42:53.863  INFO 19708 --- [http-nio-8080-exec-3] com.mbti.common.aop.LoggingAspect        : ===================================================================================
+2025-12-30 10:43:45.019  INFO 19708 --- [http-nio-8080-exec-5] com.mbti.common.aop.LoggingAspect        : [MbtiController.getAllQuestions()] 요청 / ip : 127.0.0.1
+2025-12-30 10:43:45.020  INFO 19708 --- [http-nio-8080-exec-5] c.mbti.mbti.controller.MbtiController    : GET /api/mbti/questions - Fetching all questions
+2025-12-30 10:43:45.020  INFO 19708 --- [http-nio-8080-exec-5] com.mbti.common.aop.LoggingAspect        : ========== MbtiServiceImpl.getAllQuestions() 서비스 호출 ==========
+2025-12-30 10:43:45.020  INFO 19708 --- [http-nio-8080-exec-5] com.mbti.common.aop.LoggingAspect        : Parameter : []
+2025-12-30 10:43:45.020  INFO 19708 --- [http-nio-8080-exec-5] com.mbti.mbti.service.MbtiServiceImpl    : Fetching all questions
+2025-12-30 10:43:45.023  INFO 19708 --- [http-nio-8080-exec-5] com.mbti.common.aop.LoggingAspect        : Running Time : 3ms
+2025-12-30 10:43:45.023  INFO 19708 --- [http-nio-8080-exec-5] com.mbti.common.aop.LoggingAspect        : ===================================================================================
+2025-12-30 11:02:58.238  INFO 19708 --- [http-nio-8080-exec-7] com.mbti.common.aop.LoggingAspect        : [MbtiController.getAllQuestions()] 요청 / ip : 127.0.0.1
+2025-12-30 11:02:58.239  INFO 19708 --- [http-nio-8080-exec-7] c.mbti.mbti.controller.MbtiController    : GET /api/mbti/questions - Fetching all questions
+2025-12-30 11:02:58.239  INFO 19708 --- [http-nio-8080-exec-7] com.mbti.common.aop.LoggingAspect        : ========== MbtiServiceImpl.getAllQuestions() 서비스 호출 ==========
+2025-12-30 11:02:58.239  INFO 19708 --- [http-nio-8080-exec-7] com.mbti.common.aop.LoggingAspect        : Parameter : []
+2025-12-30 11:02:58.239  INFO 19708 --- [http-nio-8080-exec-7] com.mbti.mbti.service.MbtiServiceImpl    : Fetching all questions
+2025-12-30 11:02:58.242  INFO 19708 --- [http-nio-8080-exec-7] com.mbti.common.aop.LoggingAspect        : Running Time : 3ms
+2025-12-30 11:02:58.242  INFO 19708 --- [http-nio-8080-exec-7] com.mbti.common.aop.LoggingAspect        : ===================================================================================
+2025-12-30 11:09:06.024  INFO 19708 --- [http-nio-8080-exec-9] com.mbti.common.aop.LoggingAspect        : [MbtiController.getAllQuestions()] 요청 / ip : 127.0.0.1
+2025-12-30 11:09:06.024  INFO 19708 --- [http-nio-8080-exec-9] c.mbti.mbti.controller.MbtiController    : GET /api/mbti/questions - Fetching all questions
+2025-12-30 11:09:06.024  INFO 19708 --- [http-nio-8080-exec-9] com.mbti.common.aop.LoggingAspect        : ========== MbtiServiceImpl.getAllQuestions() 서비스 호출 ==========
+2025-12-30 11:09:06.024  INFO 19708 --- [http-nio-8080-exec-9] com.mbti.common.aop.LoggingAspect        : Parameter : []
+2025-12-30 11:09:06.024  INFO 19708 --- [http-nio-8080-exec-9] com.mbti.mbti.service.MbtiServiceImpl    : Fetching all questions
+2025-12-30 11:09:06.027  INFO 19708 --- [http-nio-8080-exec-9] com.mbti.common.aop.LoggingAspect        : Running Time : 3ms
+2025-12-30 11:09:06.027  INFO 19708 --- [http-nio-8080-exec-9] com.mbti.common.aop.LoggingAspect        : ===================================================================================

@@ -21,14 +21,15 @@ class _TestScreenState extends State<TestScreen> {
   Map<int, String> answers = {}; // 답변 저장 {질문 번호 : 'A' or 'B'}
   bool isLoading = true;
 
+  // ctrl + o
   @override
   void initState() {
     super.initState();
     // 화면이 보이자마자 세팅을 할 것인데 백엔드 데이터 질문 가져오기
-    // 질문을 백엔드에서 불러오는 기능
     loadQuestions();
   } // 백엔드 데이터를 가지고 올 동안 잠시 대기하는 로딩 중
 
+  // 질문 백엔드에서 불러오는 기능
   void loadQuestions() async {
     try {
       final data = await ApiService.getQuestions();
@@ -37,7 +38,9 @@ class _TestScreenState extends State<TestScreen> {
         isLoading = false;
       });
     } catch (e) {
-      isLoading = true;
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -59,9 +62,11 @@ class _TestScreenState extends State<TestScreen> {
 
   void selectAnswer(String option) {
     setState(() {
-      answers[currentQuestion] = option; // 답변 저장
-      
-      if(currentQuestion < 12) {
+      answers[questions[currentQuestion]['id']] = option; // 답변 저장
+
+      // DB에 존재하는 총 길이의 -1 까지의 수보다 작으면
+      // index 는 0부터 존재하기 때문에 총 길이의 -1까지가 DB 데이터
+      if(currentQuestion < questions.length -1 ) {
         currentQuestion++;// 다음 질문으로 넘어가고
       } else {
         // 결과 화면으로 이동처리
@@ -75,12 +80,39 @@ class _TestScreenState extends State<TestScreen> {
     });
   }
 
+  // 결과를 백엔드에 저장하기
+  void submitTest() async {
+    try {
+      final result = await ApiService.submitTest(widget.userName, answers);
+      
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('검사 완료'),
+            content: Text(
+              '${widget.userName}님은 ${result['resultType']} 입니다.'
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => context.go("/"),
+                  child: Text('처음으로')
+              )
+            ],
+          )
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("제출 실패했습니다."))
+      );
+    }
+  }
+
   // 결과 화면을 Go_Router 설정할 수도 있고,
   // 함수 호출을 이용하여 임시적으로 결과에 대한 창을 띄울 수 있다.
   // _showResult = private 형태로 외부에서 사용할 수 없는 함수
   void _showResult(){
     showDialog(context: context,
-        builder: (context) => AlertDialog(
+        builder: (context) => AlertDialog (
           title: Text('검사완료'),
           content: Text(
             '${widget.userName}님의 답변 : \n ${answers.toString()}'
@@ -109,12 +141,23 @@ class _TestScreenState extends State<TestScreen> {
   // ui
   @override
   Widget build(BuildContext context) {
+    // 백엔드에서 데이터를 가져오는 중인 경우 로딩 화면
+    if(isLoading) {
+      return Scaffold(
+        appBar: AppBar(title: Text('불러오는 중...')),
+        body: Center(child:CircularProgressIndicator()),
+      );
+    }
     // 임시로 2문제만 있으므로 인덱스 처리를 잠시 하는 것이고 
     // 나중에는 삭제할 코드들
     int questionIndex = currentQuestion - 1;
     if(questionIndex >= questions.length) {
       questionIndex = questions.length - 1;
     }
+
+    // 백엔드에서 가져 온 데이터 중에서 현재 질문에 해당하는 데이터를
+    // q 변수 이름에 담기
+    var q = questions[currentQuestion];
 
     return Scaffold(
       appBar: AppBar(
@@ -132,7 +175,7 @@ class _TestScreenState extends State<TestScreen> {
             // ${변수이름.내부속성이름}
             // $변수이름단독하나
             Text(
-              '질문 $currentQuestion / 12',
+              '질문 ${currentQuestion + 1} / ${questions.length}',
               style: TextStyle(fontSize: 20, color: Colors.grey),
             ),
             SizedBox(height: 20),
@@ -141,7 +184,7 @@ class _TestScreenState extends State<TestScreen> {
             // currentQuestion / 12 = 처음 시작을 하고 있기 때문에 진행 중인 표기
             // minHeight : 10 = 최소 유지해야하는 프로그래스바의 세로 크기
             LinearProgressIndicator(
-              value: currentQuestion / 12,
+              value: (currentQuestion + 1) / questions.length,
               minHeight: 10,
             ),
             SizedBox(height: 20),
@@ -157,7 +200,7 @@ class _TestScreenState extends State<TestScreen> {
                *
                * questions[questionIndex]['text'] as String,
                */
-              questions[questionIndex]['text'] ?? '질문 없음',
+              q['questionText'] ?? '질문 없음',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -171,7 +214,7 @@ class _TestScreenState extends State<TestScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue
                   ),
-                  child: Text(questions[questionIndex]['optionA']!,
+                  child: Text(q['optionA']!,
                   style: TextStyle(fontSize: 20, color: Colors.white),
                   )
               ),
@@ -185,7 +228,7 @@ class _TestScreenState extends State<TestScreen> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue
                   ),
-                  child: Text(questions[questionIndex]['optionB']!,
+                  child: Text(q['optionB']!,
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   )
               ),
