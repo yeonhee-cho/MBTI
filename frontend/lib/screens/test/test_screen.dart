@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/question_model.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,7 +16,7 @@ class _TestScreenState extends State<TestScreen> {
   // 데이터 선언
   // 기능 선언
   // 현재 질문 번호(1~12)
-  List<dynamic> questions = []; // 백엔드에서 가져 온 질문들이 들어갈 배열 목록 세팅
+  List<Question> questions = []; // 백엔드에서 가져 온 질문들이 들어갈 배열 목록 세팅
 
   int currentQuestion = 0; // 보통 0부터 시작하기 때문에 0으로 설정
   Map<int, String> answers = {}; // 답변 저장 {질문 번호 : 'A' or 'B'}
@@ -62,7 +63,7 @@ class _TestScreenState extends State<TestScreen> {
 
   void selectAnswer(String option) {
     setState(() {
-      answers[questions[currentQuestion]['id']] = option; // 답변 저장
+      answers[questions[currentQuestion].id] = option; // 답변 저장
 
       // DB에 존재하는 총 길이의 -1 까지의 수보다 작으면
       // index 는 0부터 존재하기 때문에 총 길이의 -1까지가 DB 데이터
@@ -90,7 +91,7 @@ class _TestScreenState extends State<TestScreen> {
       if(mounted) {
         context.go("/result", extra: {
           'userName' : widget.userName,
-          'resultType' : result['resultType']
+          'resultType' : result.resultType
         });
       }
       /*
@@ -169,7 +170,8 @@ class _TestScreenState extends State<TestScreen> {
 
     // 백엔드에서 가져 온 데이터 중에서 현재 질문에 해당하는 데이터를
     // q 변수 이름에 담기
-    var q = questions[currentQuestion];
+    // var q = questions[currentQuestion];
+    Question q = questions[currentQuestion];
 
     return Scaffold(
       appBar: AppBar(
@@ -212,7 +214,7 @@ class _TestScreenState extends State<TestScreen> {
                *
                * questions[questionIndex]['text'] as String,
                */
-              q['questionText'] ?? '질문 없음',
+              q.questionText,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -226,7 +228,7 @@ class _TestScreenState extends State<TestScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue
                   ),
-                  child: Text(q['optionA']!,
+                  child: Text(q.optionA,
                   style: TextStyle(fontSize: 20, color: Colors.white),
                   )
               ),
@@ -240,7 +242,7 @@ class _TestScreenState extends State<TestScreen> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue
                   ),
-                  child: Text(q['optionB']!,
+                  child: Text(q.optionB,
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   )
               ),
