@@ -66,7 +66,7 @@ class _TestScreenState extends State<TestScreen> {
 
       // DB에 존재하는 총 길이의 -1 까지의 수보다 작으면
       // index 는 0부터 존재하기 때문에 총 길이의 -1까지가 DB 데이터
-      if(currentQuestion < questions.length -1 ) {
+      if(currentQuestion < questions.length -1) {
         currentQuestion++;// 다음 질문으로 넘어가고
       } else {
         submitTest();

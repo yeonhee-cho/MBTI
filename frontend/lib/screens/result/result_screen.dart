@@ -11,6 +11,8 @@ import 'package:go_router/go_router.dart';
  * )
  */
 
+// result 스크린에서 채팅을 하거나, 숫자값을 추가하거나 실질적으로 화면 자체에서 변경되는 데이터가 없으므로
+// StateLessWidget 으로 작성이 가능하다.
 class ResultScreen extends StatefulWidget {
   final String userName;
   final String resultType;
