@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/constants.dart';
+import 'package:frontend/screens/history/result_detail_screen.dart';
 import 'package:frontend/screens/home/home_screen.dart';
 import 'package:frontend/screens/result/result_screen.dart';
 import 'package:frontend/screens/test/test_screen.dart';
@@ -40,6 +41,14 @@ final GoRouter _router = GoRouter(
           return ResultScreen(
               userName : data['userName']!,
               resultType: data['resultType']!
+          );
+        }
+    ),
+    GoRoute(
+        path:'/history',
+        builder: (context, state) {
+          final data = state.extra as Map<String, dynamic>;
+          return ResultDetailScreen(
           );
         }
     )
