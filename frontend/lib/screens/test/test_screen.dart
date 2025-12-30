@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/api_service.dart';
 import 'package:go_router/go_router.dart';
 
 class TestScreen extends StatefulWidget {
@@ -14,9 +15,33 @@ class _TestScreenState extends State<TestScreen> {
   // 데이터 선언
   // 기능 선언
   // 현재 질문 번호(1~12)
-  int currentQuestion = 1;
-  Map<int, String> answer = {}; // 답변 저장 {질문 번호 : 'A' or 'B'}
+  List<dynamic> questions = []; // 백엔드에서 가져 온 질문들이 들어갈 배열 목록 세팅
 
+  int currentQuestion = 0; // 보통 0부터 시작하기 때문에 0으로 설정
+  Map<int, String> answers = {}; // 답변 저장 {질문 번호 : 'A' or 'B'}
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // 화면이 보이자마자 세팅을 할 것인데 백엔드 데이터 질문 가져오기
+    // 질문을 백엔드에서 불러오는 기능
+    loadQuestions();
+  } // 백엔드 데이터를 가지고 올 동안 잠시 대기하는 로딩 중
+
+  void loadQuestions() async {
+    try {
+      final data = await ApiService.getQuestions();
+      setState(() {
+        questions = data;
+        isLoading = false;
+      });
+    } catch (e) {
+      isLoading = true;
+    }
+  }
+
+  /*
   // 나중에 API로 교체
   final List<Map<String, String>> questions = [
     {
@@ -30,6 +55,47 @@ class _TestScreenState extends State<TestScreen> {
       'optionB': '즉흥적이다 (P)',
     }
   ];
+  */
+
+  void selectAnswer(String option) {
+    setState(() {
+      answers[currentQuestion] = option; // 답변 저장
+      
+      if(currentQuestion < 12) {
+        currentQuestion++;// 다음 질문으로 넘어가고
+      } else {
+        // 결과 화면으로 이동처리
+        _showResult();
+        // 잠시 결과 화면을 보여주는 함수 호출
+        // screens 에 /result/result_screen 명칭으로
+        // 폴더와 파일 생성 후, main router 설정해준다음
+        // context.go('/result'); 로 이동 처리
+        // main 에서는 builder 에 answers 결과까지 함께 전달
+      }
+    });
+  }
+
+  // 결과 화면을 Go_Router 설정할 수도 있고,
+  // 함수 호출을 이용하여 임시적으로 결과에 대한 창을 띄울 수 있다.
+  // _showResult = private 형태로 외부에서 사용할 수 없는 함수
+  void _showResult(){
+    showDialog(context: context,
+        builder: (context) => AlertDialog(
+          title: Text('검사완료'),
+          content: Text(
+            '${widget.userName}님의 답변 : \n ${answers.toString()}'
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  context.go('/'); // 처음으로
+                },
+                child: Text('처음으로')
+            )
+          ],
+        )
+    );
+  }
   
   // selectAnswer(String option) 
   // 선택할 답변 저장
@@ -100,26 +166,29 @@ class _TestScreenState extends State<TestScreen> {
             SizedBox(
               width: double.infinity,
               height: 60,
-              child: ElevatedButton(onPressed: ()=> context.go('/selectAnswer로 추후 교체'),
+              child: ElevatedButton(
+                  onPressed: () => selectAnswer('A'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue
                   ),
                   child: Text(questions[questionIndex]['optionA']!,
                   style: TextStyle(fontSize: 20, color: Colors.white),
-                  )),
+                  )
+              ),
             ),
             SizedBox(height: 60),
             SizedBox(
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                  onPressed: () => context.go('/selectAnswer로 추후 교체') ,
+                  onPressed: () => selectAnswer('B') ,
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue
                   ),
                   child: Text(questions[questionIndex]['optionB']!,
                     style: TextStyle(fontSize: 20, color: Colors.white),
-                  )),
+                  )
+              ),
             ),
           ],
         ),
