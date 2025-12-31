@@ -115,7 +115,7 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                     ),
                     // 예약 상세 정보
                     subtitle: Text(
-                      'E:${r.eScore} I:${r.iScore} S:${r.sScore} N:${r.nScore} \n T:${r.tScore} F:${r.fScore} J:${r.jScore} P:${r.pScore}'
+                      'E:${r.eScore} I:${r.iScore} S:${r.sScore} N:${r.nScore}\nT:${r.tScore} F:${r.fScore} J:${r.jScore} P:${r.pScore}'
                     ),
                     // 상세정보 단순히 클릭하면 보인다는 아이콘 형태의 모형
                     trailing: Icon(Icons.arrow_forward),
@@ -131,7 +131,7 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                               TextButton(onPressed: () => Navigator.pop(context), child: Text('닫기'))
                             ],
                           )
-                      )
+                      );
                     },
                   ),
                 );
