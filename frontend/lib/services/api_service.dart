@@ -128,7 +128,7 @@ class ApiService {
   * ${변수이름.세부기능()} {}로 감싸서 작성
   */
   static Future<List<Result>> getResultsByUserName(String userName) async {
-    final res = await http.get(Uri.parse('$url/results?userName=${userName}'));
+    final res = await http.get(Uri.parse('$url/results?userName=$userName'));
 
     if(res.statusCode == 200) {
       List<dynamic> jsonList = json.decode(res.body);
