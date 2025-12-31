@@ -47,9 +47,9 @@ final GoRouter _router = GoRouter(
     GoRoute(
         path:'/history',
         builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>;
-          return ResultDetailScreen(
-          );
+          final userName = state.extra as String; // 변경이 되지 않게 상수화 처리
+          // return ResultDetailScreen(userName : state.extra as String)
+          return ResultDetailScreen(userName : userName);
         }
     )
   ]

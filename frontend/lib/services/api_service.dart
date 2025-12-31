@@ -116,6 +116,29 @@ class ApiService {
       throw Exception('제출 실패');
     }
   }
+  
+  // 사용자별 결과 조회 - 000 이름에 해당하는 모든 데이터 목록 조회
+  /*
+  * 사용자별 결과 조회
+  * GET /api/mbti/results?userName={userName}
+  * Dart 은 변수이름 뒤에 하위변수나 하위 기능이 존재하지 않을 경우
+  * $변수이름 {} 없이 작성 가능
+  * 변수이름.세부변수이름 변수이름.세부기능() 과 같이 존재할 경우
+  * ${변수이름.세부변수이름}
+  * ${변수이름.세부기능()} {}로 감싸서 작성
+  */
+  static Future<List<Result>> getResultsByUserName(String userName) async {
+    final res = await http.get(Uri.parse('$url/results?userName=${userName}'));
+
+    if(res.statusCode == 200) {
+      List<dynamic> jsonList = json.decode(res.body);
+      return jsonList.map((json)=> Result.fromJson(json)).toList();
+    } else {
+      // constants 에서 지정한 에러 타입으로 교체 예정
+      throw Exception('MBTI 유형 불러오기 실패');
+    }
+  }
+  
 }
 
 /*
