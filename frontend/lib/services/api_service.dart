@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:frontend/common/constants.dart';
 import 'package:frontend/models/answer_model.dart';
+import 'package:frontend/models/mbti_type_model.dart';
 import 'package:frontend/models/question_model.dart';
 import 'package:frontend/models/result_model.dart';
 import 'package:frontend/models/test_request_model.dart';
@@ -16,7 +18,8 @@ import 'package:http/http.dart' as http;
   * */
 // models 에 작성한 자료형 변수 이름을 활용하여 데이터 타입을 지정하는 것
 class ApiService {
-  static const String url = 'http://localhost:8080/api/mbti';
+  // 상태 관리가 된 url 주소 호출
+  static const String url = ApiConstants.baseUrl;
 
   // 백엔드 컨트롤러에서 질문 가져오기
   // 보통 백엔드나 외부 api 데이터를 가져올 때 자료형으로 Future 특정 자료형을 감싸서 사용
@@ -36,7 +39,7 @@ class ApiService {
       List<dynamic> jsonList = json.decode(res.body);
       return jsonList.map((json) => Question.fromJson(json)).toList();
     } else {
-      throw Exception('불러오기 실패');
+      throw Exception(ErrorMessages.loadFailed);
     }
   }
 
@@ -104,7 +107,8 @@ class ApiService {
 
     // 어플에서 선택한 질문 번호와 질문에 대한 답변을 [{질문1, 답변}, {질문2, 답변}, {질문3, 답변}] 이런식으로 담는다.
     final res = await http.post(
-        Uri.parse('$url/submit'),
+        // http://localhost:8080/api/mbti/submit
+        Uri.parse('$url${ApiConstants.submit}'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(request.toJson())
     );
@@ -113,7 +117,7 @@ class ApiService {
       Map<String, dynamic> jsonData= json.decode(res.body);
       return Result.fromJson(jsonData);
     } else {
-      throw Exception('제출 실패');
+      throw Exception(ErrorMessages.submitFailed);
     }
   }
   
@@ -128,17 +132,97 @@ class ApiService {
   * ${변수이름.세부기능()} {}로 감싸서 작성
   */
   static Future<List<Result>> getResultsByUserName(String userName) async {
-    final res = await http.get(Uri.parse('$url/results?userName=$userName'));
+    final res = await http.get(Uri.parse('$url${ApiConstants.results}?userName=$userName'));
 
     if(res.statusCode == 200) {
       List<dynamic> jsonList = json.decode(res.body);
       return jsonList.map((json)=> Result.fromJson(json)).toList();
     } else {
       // constants 에서 지정한 에러 타입으로 교체 예정
-      throw Exception('MBTI 유형 불러오기 실패');
+      throw Exception(ErrorMessages.loadFailed);
     }
   }
-  
+
+  // 모든 MBTI 유형 조회
+  static Future<List<MbtiType>> getAllMbtiTypes() async {
+    final res = await http.get(Uri.parse('$url${ApiConstants.types}'));
+
+    if(res.statusCode == 200) {
+      List<dynamic> jsonList =json.decode(res.body);
+      return jsonList.map((json) => MbtiType.fromJson(json)).toList();
+    } else {
+      throw Exception(ErrorMessages.loadFailed);
+    }
+  }
+
+  // 특정 MBTI 유형 조회
+  static Future<MbtiType> getMbtiTypeByCode(String typeCode) async {
+    final res = await http.get(Uri.parse('$url${ApiConstants.types}$typeCode'));
+
+    if(res.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(res.body);
+      return MbtiType.fromJson(jsonData);
+    } else {
+      throw Exception(ErrorMessages.loadFailed);
+    }
+  }
+
+  // ID 로 결과 조회
+  // GET /api/mbti/result/{id}
+  // method = getResultById(int id)
+  // http.get
+  // Map<String, dynamic>
+  static Future<Result> getResultById(int id) async {
+      final res = await http.get(Uri.parse('$url${ApiConstants.result}/$id'));
+      if(res.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(res.body);
+        return Result.fromJson(jsonData);
+      } else {
+        throw Exception(ErrorMessages.loadFailed);
+      }
+  }
+
+  // 결과 삭제
+  // GET /api/mbti/result/{id}
+  // method = deleteResult(int id)
+  // http.delete
+  // final res
+  // Future 예상 결과로 백엔드에서 진행한 결과에 대한 return 없이 기능만 수행할 것
+  // Result 아니고 void!!
+  static Future<void> deleteResult(int id) async {
+    final res = await http.delete(Uri.parse('$url${ApiConstants.result}/$id'));
+
+    if(res.statusCode != 200) {
+      throw Exception("삭제에 실패했습니다.");
+    }
+  }
+
+  // Health Check = 백엔드 상태 관리용 api
+  // GET /api/mbti/health
+  // healthCheck
+  // final res
+  // 개발 회사 확인용 API
+  static Future<Result> healthCheck(int id) async {
+    final res = await http.get(Uri.parse('$url${ApiConstants.result}/${ApiConstants.health}'));
+    if(res.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(res.body);
+      return Result.fromJson(jsonData);
+    } else {
+      throw Exception(ErrorMessages.serverError);
+    }
+  }
+
+/**
+ * final res = http.Response 라는 타입으로 자동 지정
+ * final http.Response res =
+ *
+ * final res  = 명시적 추론, 타입 명시를 하지 않아 Dart에서 자동으로 반환 타입 파악 필요
+ * final String res  = 타입을 명확히 지정
+ * final int res  = 타입을 명확히 지정
+ * 
+ * final a = 1; // int 로 자동 타입 확인
+ * 개발자가 만든 자료형이나 클래스형 자료형은 필히 타입을 작성해주는 것이 좋음
+ */
 }
 
 /*
@@ -159,6 +243,8 @@ class ApiService {
  * 
  * dynamic 은 null 가능 = 컴파일에서는 우선 타입이 무엇인지 ???? 상태로 일단 만듬 -> 실행하면서 타입이 맞지 않으면 에러 발생
  */
+
+class ModelApiService {}
 
 class DynamicApiService {
   static const String url = 'http://localhost:8080/api/mbti';
