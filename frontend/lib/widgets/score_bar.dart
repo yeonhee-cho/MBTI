@@ -33,17 +33,21 @@ class ScoreBar extends StatelessWidget {
                 '$label2: $score2',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 4),
-              ClipRRect(
-                borderRadius: BorderRadiusDirectional.circular(8),
-                child: LinearProgressIndicator(
-                  value: ratio1,
-                  minHeight: 20,
-                  backgroundColor: Colors.orange[200],
-                  valueColor: AlwaysStoppedAnimation(Colors.blue),
-                ),
-              )
+              // Row 라는 클래스 내부에서는 SizedBox 를 사용하면 문제 발생!!
+              // SizedBox를 사용하고자 한다면 Row 를 Column으로 교체한다.
             ],
+          ),
+
+          SizedBox(height: 4),
+          // ClipRRect : 자식 위젯의 모서리를 둥글게 잘라낸 위젯, 둥근 형태
+          ClipRRect(
+            borderRadius: BorderRadiusDirectional.circular(8),
+            child: LinearProgressIndicator(
+              value: ratio1,
+              minHeight: 20,
+              backgroundColor: Colors.orange[200],
+              valueColor: AlwaysStoppedAnimation(Colors.blue),
+            ),
           )
         ],
       ),
