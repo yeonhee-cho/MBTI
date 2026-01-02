@@ -6,6 +6,7 @@ import 'package:frontend/models/mbti_type_model.dart';
 import 'package:frontend/models/question_model.dart';
 import 'package:frontend/models/result_model.dart';
 import 'package:frontend/models/test_request_model.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
   /*
@@ -21,6 +22,31 @@ class ApiService {
   // 상태 관리가 된 url 주소 호출
   static const String url = ApiConstants.baseUrl;
 
+  // ====================== 사용자 관련 API ======================
+  // 로그인
+  // GEY api/mbti/users
+  static Future<User> login(String userName) async {
+    final res = await http.post(
+      Uri.parse('$url${ApiConstants.userUrl}'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'userName':userName})
+    );
+
+    if(res.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(res.body);
+      return User.fromJson(jsonData);
+    } else {
+      throw Exception(ErrorMessages.submitFailed);
+    }
+  }
+
+  // 사용자명으로 사용자 조회
+  // static Future<User?> getUserByUserName(String userName)
+  // 모든 사용자 조회
+  // static Future<List<User>> getAllUsers()
+
+
+  // ====================== 질문 관련 API ======================
   // 백엔드 컨트롤러에서 질문 가져오기
   // 보통 백엔드나 외부 api 데이터를 가져올 때 자료형으로 Future 특정 자료형을 감싸서 사용
   static Future<List<Question>> getQuestions() async {
@@ -30,7 +56,7 @@ class ApiService {
      * http://localhost:8080/api/mbti/questions 로 접속했을 때 나오는 데이터
      * res.body = 백엔드에서 위 주소로 전달 받은 JSON 문자열 -> 주소로 가져오는 데이터는 한 줄로 가져온다.
      * ‘[{ “id” : 1,   “questionText” : “질문1”, “optionA” : “A”,  “optionB” : “B”}, { “id” : 1,   “questionText” : “질문1”, “optionA” : “A”,  “optionB” : “B”}, { “id” : 1,   “questionText” : “질문1”, “optionA” : “A”,  “optionB” : “B”}]’
-     * 
+     *
      * json.decode() = 한 줄로 되어있는 JSON 문자열 데이터를 Dart 형식의 객체로 변환해서 사용
      * .map((json) => Question.fromJson(json)) = 변환을 할 때 각 데이터 하나씩 json이라는 변수 이름에 담아서 Question 객체로 변환 작업을 첫 데이터 부터 끝 데이터 까지 모두 수행
      * .toList() = map으로 출력된 결과를 List 목록 형태로 변환하여 사용
@@ -75,7 +101,7 @@ class ApiService {
    *
    * 현재 우리가 작성한 백엔드에서 위와 같은 형식을 유지하고 있기 때문에
    * 만약에 TestAnswer 와 같은 응답 전용 객체를 java에서 사용하지 않는다면 entries 작업까지 할 필요는 없음
-   * 
+   *
    * Entry = 개체, DB 하나의 컬럼에 존재하는 데이터
    *
    * 사전 한 권은 Map
@@ -94,7 +120,7 @@ class ApiService {
    * 전화번호부 한 줄 :
    * 이름(key) : 홍길동
    * 전화번호(value) : 010-1234-5678
-   * 
+   *
    * -> Entry 1개 = 객체 1개의 데이터
    */
   static Future<Result> submitTest(String userName, Map<int, String> answers) async {
@@ -120,7 +146,7 @@ class ApiService {
       throw Exception(ErrorMessages.submitFailed);
     }
   }
-  
+
   // 사용자별 결과 조회 - 000 이름에 해당하는 모든 데이터 목록 조회
   /*
   * 사용자별 결과 조회
@@ -219,7 +245,7 @@ class ApiService {
  * final res  = 명시적 추론, 타입 명시를 하지 않아 Dart에서 자동으로 반환 타입 파악 필요
  * final String res  = 타입을 명확히 지정
  * final int res  = 타입을 명확히 지정
- * 
+ *
  * final a = 1; // int 로 자동 타입 확인
  * 개발자가 만든 자료형이나 클래스형 자료형은 필히 타입을 작성해주는 것이 좋음
  */

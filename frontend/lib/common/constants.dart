@@ -40,11 +40,13 @@ class ApiConstants {
   // final 대신 넣어줌
   // static final String baseUrl = 'http://localhost:8080/api/mbti';
   static const String baseUrl = 'http://localhost:8080/api/mbti';
-  static const String submit = '/submit';
-  static const String result = '/result';
-  static const String results = '/results';
-  static const String types = '/types';
-  static const String health = '/health';
+  static const String mbtiUrl = '/mbti';
+  static const String userUrl = '/users';
+  static const String submit = '$mbtiUrl/submit';
+  static const String result = '$mbtiUrl/result';
+  static const String results = '$mbtiUrl/results';
+  static const String types = '$mbtiUrl/types';
+  static const String health = '$mbtiUrl/health';
 }
 
 class AppConstants {
