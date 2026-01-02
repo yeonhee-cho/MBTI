@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _errorText; // 에러 메세지를 담을 변수 // ?가 들어간 것은 변수 공간에 null 값이 들어 갈 수 있다라는 것
 
   // 유효성 검사 함수
+  // 기능 중에 일부라도 문법 상 문제가 생기면 기능 자체가 작동 중지
   bool _validateName() {
     String name = _nameController.text.trim();
 
@@ -52,9 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // 3. 한글 영문 이 외 특수문자나 숫자 포함 체크 여부(정규식)
     // 만약 숫자도 허용하려면 r'^[가-힣-a-zA-Z0-9]+$'로 변경
-    if(!RegExp(r'^[가-힣-a-zA-Z0-9]+$').hasMatch(name)) {
+    // 만약 숫자도 허용하려면 r'^[가-힣a-zA-Z0-9]+$' - : 어디서부터 어디까지
+    // 가-힣 가에서부터 힣까지 힣에서 a까지는 잘못된 문법 정규식 동작 안 함
+    if(!RegExp(r'^[가-힣a-zA-Z]+$').hasMatch(name)) {
       setState(() {
-        _errorText = '한글 또는 영문만 입력 가능합니다.(특수문자, 숫자 불가)';
+        _errorText = '한글 또는 영문만 입력 가능합니다. \n(특수문자, 숫자 불가)';
       });
       return false;
     }
@@ -92,6 +95,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(height: 40),
+                SizedBox(
+                  width: 300,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () => context.go('/login'),
+                      child: Text(
+                          '로그인하기',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white
+                    ),
+                  ),
+                ),
+                SizedBox(height: 40),
                 /*
                 * 방법 1 번
                 * TextField 에 입력할 때 마다 표기
@@ -110,12 +129,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       errorText: _errorText,
                     ),
                     onChanged:(value) {
+                      // 모든 상태 실시간 변경은 setState(() =>{}) 내부에 작성
+                      // setState() 로 감싸지 않은 if-else 문은
+                      // 변수 값만 변경 -> 변수 값은 변화하지만 화면 업데이트는 안 됨
+                      // setState() 로 감싼 if-else 문은
+                      // 화면 자동으로 업데이트 되도록 상태 변경
+                      setState(() {
+                        if(RegExp(r'[0-9]').hasMatch(value)) {
+                          _errorText = '숫자는 입력할 수 없습니다.';
+                        } else if(RegExp(r'[^가-힣a-zA-Z]').hasMatch(value)){
+                          _errorText = '한글과 영어만 입력 가능합니다.';
+                        } else {
+                          _errorText = null;
+                        }
+                      });
+                    },
+                    /*
+                    _validateName() 을 onChanged 에서는 사용하지 않음
+                    * 글자를 입력하면 무조건 에러 메세지를 비워라
+                    * 1111을 입력하는 순간에도 계속 에러 메세지를 지워버리기 때문에
+                    * 정상적으로 _errorText 작동하나 마치 작동하지 않는 것처럼 보임
+                    onChanged:(value) {
                       if(_errorText != null) {
                         setState(() {
                           _errorText = null;
                         });
                       }
                     },
+                    * */
                   ),
                 ),
                 SizedBox(height: 20),
@@ -149,14 +190,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 50,
                   child: ElevatedButton(
                       onPressed: () {
-                        String name = _nameController.text.trim();
-
-                        if(name.isEmpty) {
-                          return;
+                        print("버튼눌림");
+                        // 이름 내부 한 번 더 상태 확인
+                        if(_validateName()) {
+                          print("검사 결과");
+                          String name = _nameController.text.trim();
+                          // 작성한 이름 유저의 mbti 결과 확인
+                          print("기록으로 이동하는 주소 위치");
+                          context.go("/history", extra:name);
                         }
-
-                        // 작성한 이름 유저의 mbti 결과 확인
-                        context.go("/history", extra:name);
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey[300],

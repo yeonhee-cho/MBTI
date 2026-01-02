@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/models/result_model.dart';
 import 'package:frontend/widgets/score_bar.dart';
 import 'package:go_router/go_router.dart';
@@ -59,6 +60,30 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   bool isLoading = true;
+
+  // 링크 복사 기능
+  // 링크 복사 함수 생성
+  void _copyResultLink() {
+    String shareUrl = 'https://나의도메인주소.com/result/${widget.result.id}';
+    Clipboard.setData(ClipboardData(text: shareUrl));
+
+    // 파란 배경 흰색 글자
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '나의 결과 링크가 복사되었습니다.',
+            style: TextStyle(
+              fontSize: 12,
+                color: Colors.white
+            ),
+          ),
+          duration: Duration(seconds: 2), // 2초 동안 보여주기
+          behavior: SnackBarBehavior.floating, // 둥둥 떠있는 스타일
+          backgroundColor: Colors.blue,
+        ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,6 +198,37 @@ class _ResultScreenState extends State<ResultScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: 20),
+
+              SizedBox(
+                width: 300,
+                height: 50,
+                /*
+                TODO
+                  // 아이콘이나 글자가 child 에 위치
+                  ElevatedButton(
+                    onPressed: () => context.go('/'),
+                    icon: Icon(Icons.share),
+                    child: Text('결과 링크 복사하기'),
+                  ),
+                  // 글자와 아이콘을 사용하는 버튼 형식
+                  ElevatedButton.icon(
+                    onPressed: () => context.go('/'),
+                    icon: Icon(Icons.share),
+                    child: Text('결과 링크 복사하기'),
+                  )
+                */
+                child :ElevatedButton.icon( // 생성자가 onPressed icon label required 나머지는 this 필수로 작성하지 않아도 되는 생성자
+                  onPressed: () => _copyResultLink(),
+                  icon: Icon(Icons.share),
+                  label: Text('결과 링크 복사하기'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber,
+                    foregroundColor: Colors.black87
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
 
               // 처음으로 버튼
               SizedBox(
