@@ -94,6 +94,7 @@ class _TestScreenState extends State<TestScreen> {
       final result = await ApiService.submitTest(widget.userName, answers);
 
       // mounted : 화면이 존재한다면과 같은 기능
+      /*
       if(mounted) {
         context.go("/result", extra: {
           'userName' : widget.userName,
@@ -108,6 +109,11 @@ class _TestScreenState extends State<TestScreen> {
           'pScore': result.pScore,
         });
       }
+      */
+      if(mounted) {
+        context.go("/result", extra:result);
+      }
+
       /*
       showDialog(
           context: context,
