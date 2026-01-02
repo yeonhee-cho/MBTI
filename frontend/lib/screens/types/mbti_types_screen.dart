@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/mbti_type_model.dart';
 import 'package:frontend/services/api_service.dart';
+import 'package:frontend/widgets/loading_view.dart';
 import 'package:go_router/go_router.dart';
+
+
+// TODO ErrorView 추가 errorMessage = "유형을 불러오는데 실패했습니다"
 
 class MbtiTypesScreen extends StatefulWidget {
   const MbtiTypesScreen({super.key});
@@ -43,6 +47,7 @@ class _MbtiTypesScreenState extends State<MbtiTypesScreen> {
         ),
       ),
       body: isLoading
+      ? LoadingView(message:'유형을 불러오는 중입니다.') : types.isEmpty
           ? Center(child: CircularProgressIndicator())
           : types.isEmpty
           ? Center(child: Text('유형 정보가 없습니다'))

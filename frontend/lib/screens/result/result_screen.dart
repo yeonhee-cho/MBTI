@@ -15,6 +15,9 @@ import 'package:go_router/go_router.dart';
 // result 스크린에서 채팅을 하거나, 숫자값을 추가하거나 실질적으로 화면 자체에서 변경되는 데이터가 없으므로
 // StateLessWidget 으로 작성이 가능하다.
 // SingleChildScrollView 가 있는 순간 화면은 움직이는 화면이기 때문에 less 사용 불가
+
+// TODO 로딩 중 화면 메세지 없이 import 하여 개발자가 원하는 본인 방식대로 추가
+// ErrorView 추가 errorMessage = "검사 기록을 불러오는데 실패했습니다"
 class ResultScreen extends StatefulWidget {
   final String userName;
   final String resultType;

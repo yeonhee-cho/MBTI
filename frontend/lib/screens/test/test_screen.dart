@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/question_model.dart';
 import 'package:frontend/services/api_service.dart';
+import 'package:frontend/widgets/error_view.dart';
+import 'package:frontend/widgets/loading_view.dart';
 import 'package:go_router/go_router.dart';
 
 class TestScreen extends StatefulWidget {
   final String userName;
+
   const TestScreen({super.key, required this.userName});
 
   @override
@@ -21,6 +24,7 @@ class _TestScreenState extends State<TestScreen> {
   int currentQuestion = 0; // 보통 0부터 시작하기 때문에 0으로 설정
   Map<int, String> answers = {}; // 답변 저장 {질문 번호 : 'A' or 'B'}
   bool isLoading = true;
+  String? errorMessage;
 
   // ctrl + o
   @override
@@ -37,10 +41,12 @@ class _TestScreenState extends State<TestScreen> {
       setState(() {
         questions = data;
         isLoading = false;
+        errorMessage = null; // 데이터 무사히 들고 왔으면 null 처리
       });
     } catch (e) {
       setState(() {
         isLoading = false;
+        errorMessage='질문을 불러오는데 실패했습니다.';
       });
     }
   }
@@ -165,9 +171,19 @@ class _TestScreenState extends State<TestScreen> {
     if(isLoading) {
       return Scaffold(
         appBar: AppBar(title: Text('불러오는 중...')),
-        body: Center(child:CircularProgressIndicator()),
+        body: LoadingView(message: '질문을 불러오는 중입니다.'),
       );
     }
+
+    if(errorMessage != null) {
+      return Scaffold(
+        appBar: AppBar(title: Text("오류 발생")),
+        // 현재 페이지에서 작성되어있는 에러 메세지를 전달
+        // 클라이언트가 다시 시도 버튼을 클릭하면 loadQuestions 을 전달? TODO
+        body: ErrorView(message: errorMessage!, onRetry: loadQuestions),
+      );
+    }
+
     // 임시로 2문제만 있으므로 인덱스 처리를 잠시 하는 것이고 
     // 나중에는 삭제할 코드들
     int questionIndex = currentQuestion - 1;
