@@ -40,8 +40,8 @@ final GoRouter _router = GoRouter(
         path:'/result',
         builder: (context, state) {
           // final data = state.extra as Map<String, dynamic>;
-          final data = state.extra as Result;
-          return ResultScreen(result: data);
+          final result = state.extra as Result;
+          return ResultScreen(result: result);
           /*
           return ResultScreen(
               userName : data['userName']!,
