@@ -218,6 +218,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           foregroundColor: Colors.black87
                       ),
                       child: Text("MBTI 유형 보기")),
+                ),
+                SizedBox(height: 10),
+                SizedBox(
+                  width: 300,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () => context.go('/signup'),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white
+                      ),
+                      child: Text("회원가입하기")),
                 )
               ],
             ),

@@ -32,4 +32,11 @@ public interface  UserService {
      * 사용자 삭제
      */
     public void deleteUser(int id);
+
+    // 회원가입 메서드 추가
+    // 메서드명: signup
+    // 반환타입: User
+    // 매개변수: String userName
+    // 예외: 중복 시 IllegalArgumentException 발생
+    public User signup(String userName);
 }

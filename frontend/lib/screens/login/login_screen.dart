@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/services/api_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 /*
 * 로그인 한 유저 이름이 테스트로 넘어가는지 확인
@@ -101,6 +104,55 @@ class LoginScreenState extends State<LoginScreen> {
 
   }
 
+  Future<void> _handleLogin() async {
+    if(!_validateName()) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      String name = _nameController.text.trim();
+      // 1번 로그인 기능 작성
+      final user = await ApiService.login(name);
+
+      if(mounted){
+        await context.read<AuthProvider>().login(user);
+
+        // 2번 ScaffoldMessenger.of content ${user.userName}님, 환영합니다.
+        ScaffoldMessenger.of(context).showSnackBar(
+          // 구글에서 만든 디자인과 디자인 세부 설정이 작성되어있는 SnackBar.dart 클래스 파일
+          // SnackBar를 만들 때 필수로 사용했으면 하는 속성
+          // 선택적으로 사용했으면 하는 속성
+          // content 라는 속성은 필수로 사용했으면 좋겠다는 속성
+          // 이 속성에는 클라이언트들이 어떤 바인지 확인할 수 있는 텍스트나 아이콘이 있었으면 좋겠다.
+          // Text()의 경우에도 Google에서 예쁘게 중간은 가는 디자인을 설정한 Text.dart 파일
+          // 어느 정도 디자인을 할 수 있는 상급 개발자가 되고 나면 Google 에서 제공하는 디자인을 사용하는 것이 아니라
+          // 회사 내부 규정대로 만들어 놓은 회사이름_Text() / DarkThemeText.dart 와 같은 파일을 만들어 사용할 수 있으므로
+          // content: 개발자가 사용하고자하는 UI 기반 클래스 작성해라
+            SnackBar(
+                content: Text("${user.userName}님, 환영합니다."),
+                duration:Duration(seconds: 2)
+                // 구글 meterial 에서 만든 ui이 디자인이 되어있는 객체 사용!
+            ),
+        );
+        // 로그인 후 이동하고자 하는 화면 이동
+        context.go("/");
+      }
+    } catch(e) {
+      if(mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('로그인에 실패했습니다. 다시 시도해주세요.'),
+          ),
+        );
+      }
+    }
+  }
+
   /* 4: build 메서드 구현 - 기본 Scaffold 구조 */
   @override
   Widget build(BuildContext context) {
@@ -195,15 +247,17 @@ class LoginScreenState extends State<LoginScreen> {
                       /* 5-7-1: onPressed 이벤트 */
                       // - _validateName() 함수 호출하여 검증
                       // - 검증 성공(true) 시 화면 이동 처리
-                      onPressed: () {
-                        if(_validateName()) {
-                          /* 5-7-1-1: 입력값 가져오기 */
-                          String name = _nameController.text.trim();
-                          /* 5-7-1-2: 화면 이동 */
-                          // - extra 파라미터로 이름 전달
-                          context.go('/test', extra: name);
-                        }
-                      },
+                      onPressed: 
+                        _isLoading ? null : _handleLogin,
+                        //   () {
+                        // if(_validateName()) {
+                        //   /* 5-7-1-1: 입력값 가져오기 */
+                        //   String name = _nameController.text.trim();
+                        //   /* 5-7-1-2: 화면 이동 */
+                        //   // - extra 파라미터로 이름 전달
+                        //   context.go('/test', extra: name);
+                        // }
+                      // },
                       /* 5-7-2: 버튼 스타일 설정 */
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
@@ -220,6 +274,24 @@ class LoginScreenState extends State<LoginScreen> {
                       )
                   ),
                 ),
+                
+                SizedBox(height: 20),
+                Row(
+                  /*
+                  * 가운데 정렬 상태
+                  * 계정이 없으신가요? -> Text() 
+                  * 
+                  * TextButton 이용해서 회원가입하기 완성
+                  * */
+                  mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
+                  children: [
+                    Text('계정이 없으신가요?'),
+                    TextButton(
+                      onPressed: _isLoading ? null : () => context.go('/signup'),
+                      child: Text('회원가입하기'),
+                    ),
+                  ],
+                )
               ],
             ),
         ),)

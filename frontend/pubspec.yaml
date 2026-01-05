@@ -22,6 +22,8 @@ dependencies:
   # 경로 이동에 사용
   go_router: ^14.0.0
   cupertino_icons: ^1.0.8
+  # 로그인 상태 저장 모듈
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

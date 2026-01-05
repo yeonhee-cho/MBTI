@@ -58,10 +58,16 @@ class _SignupScreenState extends State<SignupScreen> {
     // 실패 에러메세지 로딩해지
 
     // 1. 유효성 검사
+
     // 2. 로딩 상태 true로 변경
+    _isLoading = true;
+
     // 3. ApiService.login(name) 호출
+
     // 4. 성공 시: SnackBar 표시 + 검사 화면으로 이동
+
     // 5. 실패 시: 에러 SnackBar 표시 + 로딩 해제
+    _isLoading = false;
   }
   @override
   Widget build(BuildContext context) {
@@ -82,7 +88,7 @@ class _SignupScreenState extends State<SignupScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // 회원가입에 필요한 UI
-                Icon(Icons.person, size: 100, color: Colors.green),
+                Icon(Icons.person_add, size: 100, color: Colors.green),
                 SizedBox(height: 30),
                 Text(
                   'MBTI 검사를 위해\n회원가입해주세요',
@@ -90,10 +96,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 40),
+                
+                // 테두리를 만들 때 Container SizedBox
                 SizedBox(
                   width: 300,
                   child: TextField(
                     controller: _nameController,
+                    enabled: !_isLoading, // 로딩 중에는 작성 불가 활성화 : true, false disabled 효과 적용
                     decoration: InputDecoration(
                       labelText: '이름',
                       hintText: '이름을 입력하세요.',
@@ -103,6 +112,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     onChanged:(value) {
                       setState(() {
+                        // 정규식으로 입력값 검증
+                        // 만약 숫자가 보이면 -> 숫자는 입력할 수 없습니다.
+                        // 한글, 영어 이 외가 들어가면 -> 한글과 영어만 입력 가능합니다.
                         if(RegExp(r'[0-9]').hasMatch(value)) {
                           _errorText = '숫자는 입력할 수 없습니다.';
                         } else if(RegExp(r'[^가-힣a-zA-Z]').hasMatch(value)){
@@ -120,29 +132,24 @@ class _SignupScreenState extends State<SignupScreen> {
                   width: 300,
                   height: 50,
                   child: ElevatedButton(
-                      onPressed: () {
-                        if(_validateName()) {
-                          String name = _nameController.text.trim();
-                          context.go('/test', extra: name);
-                        }
-                      },
+                      onPressed: _isLoading ? null : _handleSignup, // 로딩 중에는 버튼 비활성화 처리하여 여러 번 클릭 방지
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white
                       ),
                       child: _isLoading
-                          ? CircularProgressIndicator(color: Colors.white)
-                          : Text(
-                            '회원가입하기',
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
+                          ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        )
+                      ) : Text ('회원가입하기')
                   ),
                 ),
                 SizedBox(height: 20),
-
+                // 로그인 링크
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
