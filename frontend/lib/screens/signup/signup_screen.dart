@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/services/api_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -51,23 +54,60 @@ class _SignupScreenState extends State<SignupScreen> {
     });
     return true;
   }
-  
-  void _handleSignup(){
+
+  // 백엔드와 주고 받는 Future<> 를 작성하지 않아도 문제가 발생하지는 않지만
+  // 프론트엔드와 백엔드가 데이터를 주고 받을 때 중간에 언젠가 문제가 발생할 수 있기 때문에
+  // 백엔드와 주고 받는 기능이다라고 선언하는 느낌으로 Future 를 작성해주기!!
+  void _handleSignup() async{
     // 백엔드 회원가입 API 호출
     // 성공 -> 자동 로그인과 함께 검사 화면 이동
     // 실패 에러메세지 로딩해지
 
     // 1. 유효성 검사
+    if(!_validateName()) return;
 
     // 2. 로딩 상태 true로 변경
-    _isLoading = true;
+    setState(() {
+      _isLoading = true;
+    });
 
+    try{
+      String name = _nameController.text.trim();
     // 3. ApiService.login(name) 호출
+      final user = await ApiService.login(name);
 
-    // 4. 성공 시: SnackBar 표시 + 검사 화면으로 이동
+      if(mounted) {
+        // Provider에 로그인 정보 저장
+        await context.read<AuthProvider>().login(user);
 
-    // 5. 실패 시: 에러 SnackBar 표시 + 로딩 해제
-    _isLoading = false;
+       // 4. 성공 시: SnackBar 표시 + 검사 화면으로 이동
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${user.userName}님, 회원가입이 완료되었습니다.'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            )
+        );
+        context.go('/test', extra: name);
+      }
+    } catch(e) {
+      // 5. 실패 시: 에러 SnackBar 표시 + 로딩 해제
+      if(mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('회원가입에 실패했습니다. 다시 확인해주세요.'), // TODO
+              backgroundColor: Colors.red,
+            )
+        );
+      }
+
+    }
+
+
   }
   @override
   Widget build(BuildContext context) {

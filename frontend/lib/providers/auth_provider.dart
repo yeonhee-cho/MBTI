@@ -38,7 +38,7 @@ class AuthProvider with ChangeNotifier {
   }
   
   // 어플 시작 시 저장된 로그인 상태 복원(나의 핸드폰에 내장되어있는 데이터로 복원)
-  Future<void> loadSaveUser(User user) async {
+  Future<void> loadSaveUser() async {
     _isLoading = true;
     notifyListeners(); // UI 업데이트
 
