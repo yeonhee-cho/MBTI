@@ -117,9 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(child: Text('$userName님')),
-                    PopupMenuItem(child: Text('내기록보기'), value: 'history'),
+                    PopupMenuItem(child: Text('내 기록 보기'), value: 'history'),
                     PopupMenuDivider(),
-                    PopupMenuItem(child: Text('내기록보기'), value: 'history'),
+                    PopupMenuItem(child: Text('로그아웃'), value: 'logout'),
                   ],
                 ),
             ],
