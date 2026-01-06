@@ -16,7 +16,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+/*
+* 단순 get method 는 가볍게
+* @CrossOrigin(origins = "*") 사용 가능하지만
+* get 이 외 메서드는 추가 cors 설정 필요
+* @CrossOrigin(origin = "*", allowedHeaders = "*")
+* 제일 좋은 방법은 WebConfig 세팅
+* WebConfig.java 세팅하는 순간부터는 @CrossOrigin() 사용 금지
+* 이중으로 웹 연결 설정을 할 경우 환경 설정 로직이 내부에서 중첩되어 코드 꼬일 수 있다.
+*
+* A 부서 : WebConfig 로 프론트엔드 연결 가능한 주소를 세팅
+*
+* B 부서 : @CrossOrigin 으로 프론트엔드 연결 가능한 주소를 세팅
+*
+* => 외부에서 봤을 때는 A부서와 B 부서가 대화가 안된 상태이고, 어떤 부서가 만든 프론트엔드 허용 로직을 사용해야하는지 알 수 없는 상태
+*
+* 본인 개별적으로 코드를 작성해놓고 부서 두가지로 팀을 나누어 겨루는 상황 비슷
+* 팀 내에서도 소통 불능으로 인하여 프론트엔드 연결 설정을 모두 따로 작업했다로 표기를 하는 것과 같음
+* 
+* 반드시 WebConfig 프론트엔드 주소 세팅하거나 @CrossOrigin 주소 세팅
+* 주로 WebConfig 사용 권고
+*  */
+// CrossOrigin을 WebConfig 로 변경하여 사용
+// 회원가입 성공되었습니다. 까지 확인하기
+// @CrossOrigin(origins = "*", allowedHeaders = "*")
 @Slf4j
 public class UserController {
 

@@ -39,7 +39,7 @@
 class ApiConstants {
   // final 대신 넣어줌
   // static final String baseUrl = 'http://localhost:8080/api/mbti';
-  static const String baseUrl = 'http://localhost:8080/api/mbti';
+  static const String baseUrl = 'http://localhost:8080/api';
   static const String mbtiUrl = '/mbti';
   static const String userUrl = '/users';
   static const String submit = '$mbtiUrl/submit';

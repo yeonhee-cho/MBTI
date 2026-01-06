@@ -26,8 +26,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   // 로그아웃 처리
-  Future<void> logout(User user) async {
-    _user = user;
+  Future<void> logout() async {
+    _user = null;
 
     // SharedPreferences 에 사용자 정보 삭제
     final prefs = await SharedPreferences.getInstance();

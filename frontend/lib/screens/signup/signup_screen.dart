@@ -74,7 +74,7 @@ class _SignupScreenState extends State<SignupScreen> {
     try{
       String name = _nameController.text.trim();
     // 3. ApiService.login(name) 호출
-      final user = await ApiService.login(name);
+      final user = await ApiService.signup(name);
 
       if(mounted) {
         // Provider에 로그인 정보 저장
@@ -99,7 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('회원가입에 실패했습니다. 다시 확인해주세요.'), // TODO
+              content: Text('회원가입에 실패했습니다. 다시 시도해주세요.'),
               backgroundColor: Colors.red,
             )
         );
@@ -157,7 +157,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         // 한글, 영어 이 외가 들어가면 -> 한글과 영어만 입력 가능합니다.
                         if(RegExp(r'[0-9]').hasMatch(value)) {
                           _errorText = '숫자는 입력할 수 없습니다.';
-                        } else if(RegExp(r'[^가-힣a-zA-Z]').hasMatch(value)){
+                        } else
+                          // 가-힇 : ㄱ ㄴ ㄷ ㄹ 처럼 자음 모음 형태의 글자는 사용 불가
+                          // ㄱ-힇 : 이런 형태로 한글로 되어 있는 자음 부터 모든 글자 가능
+                          // ㅎ 우리 회사가 원하는 한글 아님 홍 과 같이 자음과 모음으로 이루어진 한글만 취급하겠다.
+                          if(RegExp(r'[^가-힣a-zA-Z]').hasMatch(value)){
                           _errorText = '한글과 영어만 입력 가능합니다.';
                         } else {
                           _errorText = null;
