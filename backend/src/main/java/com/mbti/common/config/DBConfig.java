@@ -1,6 +1,8 @@
 package com.mbti.common.config;
 
+
 import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -41,6 +43,11 @@ public class DBConfig {
     }
 
     @Bean
+    public DataSource dataSource() {
+        return new HikariDataSource(hikariConfig());
+    }
+
+    @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
@@ -48,8 +55,7 @@ public class DBConfig {
         sqlSessionFactoryBean.setMapperLocations(
                 applicationContext.getResources("classpath:/mappers/**/*.xml")
         );
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.instagram");
-
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.mbti");
 
         sqlSessionFactoryBean.setConfigLocation(
                 applicationContext.getResource("classpath:/mybatis-config.xml")
@@ -61,6 +67,7 @@ public class DBConfig {
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
+
     @Bean
     public DataSourceTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);

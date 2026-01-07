@@ -26,7 +26,7 @@ class LoginScreenState extends State<LoginScreen> {
   // - 유효성 검사 실패 시 표시할 에러 메시지
   // - String? 타입으로 선언 (null 가능)
   // - 초기값은 null
-  String? _errorText = null;
+  String? _errorText;
 
 
   /* 2-3: 로딩 상태 변수 선언 */

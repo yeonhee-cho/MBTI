@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/constants.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/widgets/home/guest_section.dart';
+import 'package:frontend/widgets/home/profile_menu.dart';
+import 'package:frontend/widgets/home/user_section.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -24,24 +27,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // HomeScreen 내부에서 사용 할 변수 이름, 함수 이름 작성할 공간
   /*
-  * 만약에 input 이나 textarea을 사용할 경우에는 사용자들이 작성한 값(value)를 읽고
-  * 읽은 value 데이터를 가져오기 위해 기능 작성해야 함
-  * -> dart 에서는 TextEditingController 객체를 미리 만들어 놓았음
-  *
-  * 사용 방법
-  * 1. 컨트롤러 상태를 담을 변수 공간 설정 _ private 설정을 안 해도 됨
-  * 2. TextField 에 연결
-  * TextField(
-  *     controller : _nameController 와 같은 형태로 내부에서 작성된 value 를 연결
-  * )
-  * 3. 값을 가져와서 확인하거나 사용하기
-  * String name = _nameController.text;
-  * */
-  final TextEditingController _nameController = TextEditingController();
+  TextField TextFormField 처럼 텍스트를 제어하고 관리하는 클래스
 
-  String? _errorText;
+  _nameController
+  변수명 앞의 _는 현재 파일에서만 사용 가능한 private 변수
+
+  사용 예시
+
+  TextField( controller : _nameController , )
+  클라이언트는 필드내부에 텍스트 작성
+
+  작성한 텍스트를 가져와서 사용하는 방법
+  String name = _nameController.text;
+
+  _nameController 내부 텍스트를 변경하는 방법
+  _nameController.text = "홍길동"
+   */
+  final TextEditingController _nameController = TextEditingController();
+  String? _errorText; // 에러 메세지를 담을 변수 // ?가 들어간 것은 변수 공간에 null 값이 들어 갈 수 있다라는 것
 
   // 홈 화면 시작하자마자 실행할 기능들 세팅 ctrl + o
   // git init -> git 초기 세팅 처럼 init 초기 세팅
@@ -55,12 +59,30 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // 에러 메세지를 담을 변수 // ?가 들어간 것은 변수 공간에 null 값이 들어 갈 수 있다라는 것
-
+  /*
+  * 로그인한 상태에서 검사 시작하기 버튼을 클릭했을 때,
+  * _validateName() 기능이 _nameController.text 접근하여 클라이언트가 작성한 데이터좀 확인해볼까~~
+  *
+  * _nameController 이름은 개발자가 지정하는 변수 명칭일 뿐
+  * 소비자의 이름을 제어하기 위해 명칭 controller 와 name 을 추가하여 생성
+  *
+  * 로그인한 상태에서는 GuestSection 이 렌더링 되지 않음
+  * _nameController 가 초기화 되지 않은 상태
+  * _nameController = null 도 아닌 undefined.text 로 오류 발생
+  *
+  * _nameController.text.trim()
+  * */
   // 유효성 검사 함수
   // 기능 중에 일부라도 문법 상 문제가 생기면 기능 자체가 작동 중지
   bool _validateName() {
+    // 로그인 한 경우에는 소비자가 input 창에 본인의 이름을 작성했는지 검증할  필요가 없으므로
+    if(context.read<AuthProvider>().isLoggedIn){
+      return true; // 바로 통과~! 반환
+    }
+
+    // 게스트인 경우에만 _nameController = 소비자가 작성한 명칭이 들어있는 공간에 접근
     String name = _nameController.text.trim();
+
 
     // 1. 빈 값 체크
     if (name.isEmpty) {
@@ -95,6 +117,22 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     return true;
   }
+
+  // HomeScreen 내부에서 사용 할 변수 이름, 함수 이름 작성할 공간
+  /*
+  * 만약에 input 이나 textarea을 사용할 경우에는 사용자들이 작성한 값(value)를 읽고
+  * 읽은 value 데이터를 가져오기 위해 기능 작성해야 함
+  * -> dart 에서는 TextEditingController 객체를 미리 만들어 놓았음
+  *
+  * 사용 방법
+  * 1. 컨트롤러 상태를 담을 변수 공간 설정 _ private 설정을 안 해도 됨
+  * 2. TextField 에 연결
+  * TextField(
+  *     controller : _nameController 와 같은 형태로 내부에서 작성된 value 를 연결
+  * )
+  * 3. 값을 가져와서 확인하거나 사용하기
+  * String name = _nameController.text;
+  * */
 
   // UI 화면
   /*
@@ -144,29 +182,10 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               // 로그인 상태에 따라 버튼 표시
               if (isLoggedIn)
-                PopupMenuButton<String>(
-                  icon: Icon(Icons.account_circle),
-                  onSelected: (value) {
-                    if (value == 'logout') {
-                      _handleLogout();
-                    } else if (value == 'history') {
-                      context.go("/history", extra: userName);
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(child: Text('$userName님')),
-                    PopupMenuItem(child: Text('내 기록 보기'), value: 'history'),
-                    PopupMenuDivider(),
-                    PopupMenuItem(
-                        child: Text(
-                            '로그아웃',
-                            style: TextStyle(color: Colors.red),
-                        ),
-
-                        value: 'logout',
-                    ),
-                  ],
-                ),
+                // 분리된 프로필 메뉴 위젯에 
+                // userName 이라는 명칭으로 userName 내부 데이터 전달
+                // onLogout 이라는 명칭으로 _handleLogout 기능 전달
+                ProfileMenu(userName: userName, onLogout: _handleLogout)
             ],
           ),
           body: SingleChildScrollView(
@@ -182,136 +201,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       '나의 성격을 알아보는 ${AppConstants.totalQuestions}가지 질문',
                       style: TextStyle(fontSize: 20),
                     ),
+
                     SizedBox(height: 40),
                     if(!isLoggedIn) ...[
-                      SizedBox(
-                        width: 300,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () => context.go('/login'),
-                          child: Text('로그인하기', style: TextStyle(fontSize: 20)),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        width: 300,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () => context.go('/signup'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            foregroundColor: Colors.white,
-                          ),
-                          child: Text("회원가입하기"),
-                        ),
-                      ),
+                      GuestSection()
                     ] else ... [
-                      SizedBox(height: 40),
-                      /*
-                      * 방법 1 번
-                      * TextField 에 입력할 때 마다 표기
-                      *
-                      * 방법 2 번
-                      * ElevatedButton을 클릭할 때 표기
-                      *  */
-                      SizedBox(
-                        width: 300,
-                        child: TextField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            labelText: '이름',
-                            hintText: '이름을 입력하세요.',
-                            border: OutlineInputBorder(),
-                            errorText: _errorText,
-                          ),
-                          onChanged: (value) {
-                            // 모든 상태 실시간 변경은 setState(() =>{}) 내부에 작성
-                            // setState() 로 감싸지 않은 if-else 문은
-                            // 변수 값만 변경 -> 변수 값은 변화하지만 화면 업데이트는 안 됨
-                            // setState() 로 감싼 if-else 문은
-                            // 화면 자동으로 업데이트 되도록 상태 변경
-                            setState(() {
-                              if (RegExp(r'[0-9]').hasMatch(value)) {
-                                _errorText = '숫자는 입력할 수 없습니다.';
-                              } else if (RegExp(
-                                r'[^가-힣a-zA-Z]',
-                              ).hasMatch(value)) {
-                                _errorText = '한글과 영어만 입력 가능합니다.';
-                              } else {
-                                _errorText = null;
-                              }
-                            });
-                          },
-                          /*
-                          _validateName() 을 onChanged 에서는 사용하지 않음
-                          * 글자를 입력하면 무조건 에러 메세지를 비워라
-                          * 1111을 입력하는 순간에도 계속 에러 메세지를 지워버리기 때문에
-                          * 정상적으로 _errorText 작동하나 마치 작동하지 않는 것처럼 보임
-                          onChanged:(value) {
-                            if(_errorText != null) {
-                              setState(() {
-                                _errorText = null;
-                              });
-                            }
-                          },
-                          * */
-                        ),
-                      ),
-                      SizedBox(height: 20),
+                      UserSection()
+                    ],
+                    SizedBox(height: 20),
 
-                      SizedBox(
-                        width: 300,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
+                    // 검사 시작하기 버튼은 게스트 모드, 유저모드 관계없이 누구나 볼 수 있어야 함
+                    // 게스트는 유저 이름 입력하고 검사 시작할 수 있다.
+                    // 유저는 로그인한 유저 이름으로 검사 시작할 수 있다.
+                    /*
+                    The following JSNoSuchMethodError was thrown while handling a gesture:
+                    TypeError: Cannot read properties of undefined (reading 'text')
+                    When the exception was thrown, this was the stack:
+                    package:frontend/screens/home/home_screen.dart 38:40                              [_validateName]
+
+                     _nameController 문제 생김
+
+                     */
+                    SizedBox(
+                      width: 300,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_validateName()) {
                             String name = _nameController.text.trim();
-
-                            if (name.isEmpty) {
-                              // 이름이 비어있을 경우 비어있음에 대한 안내 후 돌려보내기
-                              return;
-                            }
 
                             // 검사 화면으로 이동 (이름전달)
                             context.go('/test', extra: name);
-                          },
-                          child: Text('검사 시작하기', style: TextStyle(fontSize: 16)),
-                        ),
+                          }
+                        },
+                        child: Text('검사 시작하기', style: TextStyle(fontSize: 16)),
                       ),
-                      /*
-                      * div 와 성격이 같은 SizeBox를 이용해서
-                      * 이전 결과 보기 버튼 생성할 수 있다.
-                      * 굳이 SizedBox 를 사용하여 버튼을 감쌀 필요는 없지만
-                      * 상태 관리나 디자인을 위해서 SizedBox 로 감싼 다음 버튼을 작성하는 것도 방법이다.
-                      * */
-                      SizedBox(height: 20),
-                      SizedBox(
-                        width: 300,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            print("버튼눌림");
-                            // 이름 내부 한 번 더 상태 확인
-                            if (_validateName()) {
-                              print("검사 결과");
-                              String name = _nameController.text.trim();
-                              // 작성한 이름 유저의 mbti 결과 확인
-                              print("기록으로 이동하는 주소 위치");
-                              context.go("/history", extra: name);
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[300],
-                            foregroundColor: Colors.black87,
-                          ),
-                          child: Text("이전 결과 보기"),
-                        ),
-                      ),
-                    ],
-                    SizedBox(height: 10),
+                    ),
+                    // if else 와 관계없이 누구나 검사를 시작하는 버튼을 클릭할 수 있어야한다.
+                    SizedBox(height: 40),
                     SizedBox(
                       width: 300,
                       height: 50,
@@ -324,6 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text("MBTI 유형 보기"),
                       ),
                     ),
+                    SizedBox(height: 10),
                   ],
                 ),
               ),

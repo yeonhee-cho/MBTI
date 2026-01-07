@@ -63,6 +63,7 @@ final GoRouter _router = GoRouter(
           */
         }
     ),
+    // 기록
     GoRoute(
         path:'/history',
         builder: (context, state) {
@@ -71,18 +72,22 @@ final GoRouter _router = GoRouter(
           return ResultDetailScreen(userName : userName);
         }
     ),
+    // 회원가입
     GoRoute(
         path:'/signup',
         builder: (context, state) => SignupScreen()
     ),
+    // 타입
     GoRoute(
         path:'/types',
         builder: (context, state) => MbtiTypesScreen()
     ),
+    // 로그인
     GoRoute(
         path:'/login',
         builder: (context, state) => LoginScreen()
     ),
+    // 회원가입
     GoRoute(
         path:'/signup',
         builder: (context, state) => SignupScreen()

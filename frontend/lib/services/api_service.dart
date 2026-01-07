@@ -10,14 +10,14 @@ import 'package:frontend/models/test_request_model.dart';
 import 'package:frontend/models/user_model.dart';
 // import 'package:http/http.dart' as http;
 
-  /*
-  * final에 비해서 const 가 가벼움
-  * 단기적으로 값 변경하지 못 하도록 상수처리 할 때 = final
-  * 장기적으로 전체 공유하는 상수 처리 값 = const
-  *
-  * const = 어플 전체적으로 사용되는 상수 명칭
-  * final = 특정 기능이나 특정 화면에서만 부분적으로 사용되는 상수 명칭
-  * */
+/*
+* final에 비해서 const 가 가벼움
+* 단기적으로 값 변경하지 못 하도록 상수처리 할 때 = final
+* 장기적으로 전체 공유하는 상수 처리 값 = const
+*
+* const = 어플 전체적으로 사용되는 상수 명칭
+* final = 특정 기능이나 특정 화면에서만 부분적으로 사용되는 상수 명칭
+* */
 // models 에 작성한 자료형 변수 이름을 활용하여 데이터 타입을 지정하는 것
 /*
 * Dio의 장점

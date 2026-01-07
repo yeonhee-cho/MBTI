@@ -33,7 +33,7 @@ class _SignupScreenState extends State<SignupScreen> {
       return false;
     }
 
-    //최소 글자 후 체크(2글자 이상)
+    // 2. 최소 글자 후 체크(2글자 이상)
     if(name.length < 2) {
       setState(() {
         _errorText = '이름은 최소 2글자 이상이어야 합니다.';
@@ -73,7 +73,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
     try{
       String name = _nameController.text.trim();
-    // 3. ApiService.login(name) 호출
+      // 3. ApiService.login(name) 호출
       final user = await ApiService.signup(name);
 
       if(mounted) {
@@ -104,10 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
             )
         );
       }
-
     }
-
-
   }
   @override
   Widget build(BuildContext context) {
@@ -119,7 +116,11 @@ class _SignupScreenState extends State<SignupScreen> {
             icon: Icon(Icons.arrow_back),
         ),
       ),
-      // SingleChildScrollView(child:Center(child:Container(child:Column(children[회원가입에 필요한 UI]))
+      // SingleChildScrollView(
+      // child:Center(
+      // child:Container(
+      // child:Column(
+      // children[회원가입에 필요한 UI]))
       body: SingleChildScrollView(
         child : Center(
           child: Container( // Container 가 오면 가로 세로 padding 속성 사용
