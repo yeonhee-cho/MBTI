@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ErrorView extends StatelessWidget {
   final String message;
@@ -44,6 +45,14 @@ class ErrorView extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               ),
+          ),
+          SizedBox(height: 32),
+          ElevatedButton.icon(
+            onPressed:() => context.go('/'),
+            label: Text('홈으로 가기'),
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+            ),
           ),
         ],
       ),

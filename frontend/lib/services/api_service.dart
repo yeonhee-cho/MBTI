@@ -8,6 +8,7 @@ import 'package:frontend/models/question_model.dart';
 import 'package:frontend/models/result_model.dart';
 import 'package:frontend/models/test_request_model.dart';
 import 'package:frontend/models/user_model.dart';
+import 'package:frontend/services/network_service.dart';
 // import 'package:http/http.dart' as http;
 
 /*
@@ -84,8 +85,16 @@ class ApiService {
     }
   }
 
+  static NetworkService _networkService = NetworkService();
   static Future<List<Question>> getQuestions() async {
-    final res = await _dio.get('/questions');
+
+    if(!await _networkService.isConnected()) {
+      throw Exception('네트워크에 연결되어있지 않습니다.');
+    }
+    
+    // 백엔드와 연결되어 있는지 확인 후 아래 기능 수행
+
+    final res = await _dio.get('${ApiConstants.questions}');
 
     if(res.statusCode == 200) {
       List<dynamic> jsonList = res.data;

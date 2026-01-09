@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/constants.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/services/network_service.dart';
 import 'package:frontend/widgets/home/guest_section.dart';
 import 'package:frontend/widgets/home/profile_menu.dart';
 import 'package:frontend/widgets/home/user_section.dart';
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
    */
   final TextEditingController _nameController = TextEditingController();
   String? _errorText; // 에러 메세지를 담을 변수 // ?가 들어간 것은 변수 공간에 null 값이 들어 갈 수 있다라는 것
+  final NetworkService _networkService = NetworkService();
 
   // 홈 화면 시작하자마자 실행할 기능들 세팅 ctrl + o
   // git init -> git 초기 세팅 처럼 init 초기 세팅
@@ -57,6 +59,23 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AuthProvider>().loadSaveUser();
     });
+    _checkNetwork();
+  }
+
+  // initState() 사용할 것
+  // initState() 내부에 아래 기능 로드
+  void _checkNetwork() async {
+    final status = await _networkService.checkStatus();
+
+    if(mounted && status.contains('x나 연결 안 되어있다는 공통된 구문이 포함되어 있다면')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content:
+          Text(status),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 3),
+          )
+      );
+    }
   }
 
   /*
