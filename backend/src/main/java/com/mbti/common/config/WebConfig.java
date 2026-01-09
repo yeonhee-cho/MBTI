@@ -34,7 +34,8 @@ public class WebConfig implements WebMvcConfigurer {
                         .allowedOrigins(
                                 "http://localhost:3001",
                                 "http://localhost:3000", // IOS 테스트에서는 8080
-                                "http://localhost:53302",
+                                "http://localhost:59079",
+                                "http://localhost:8080",
                                 "http://10.0.2.2:8080" // 안드로이드 핸드폰 테스트
                         )
                         .allowCredentials(true)

@@ -204,7 +204,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     SizedBox(height: 40),
                     if(!isLoggedIn) ...[
-                      GuestSection()
+                      GuestSection(
+                        abc: _nameController,
+                        eText : _errorText,
+                          onErrorChanged : (error) => setState(() =>_errorText = error)
+                      )
                     ] else ... [
                       UserSection()
                     ],
@@ -220,7 +224,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     package:frontend/screens/home/home_screen.dart 38:40                              [_validateName]
 
                      _nameController 문제 생김
-
                      */
                     SizedBox(
                       width: 300,
@@ -234,7 +237,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             context.go('/test', extra: name);
                           }
                         },
-                        child: Text('검사 시작하기', style: TextStyle(fontSize: 16)),
+                        child: Text(
+                            '검사 시작하기',
+                            style: TextStyle(fontSize: 16)
+                        ),
                       ),
                     ),
                     // if else 와 관계없이 누구나 검사를 시작하는 버튼을 클릭할 수 있어야한다.
@@ -248,7 +254,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           backgroundColor: Colors.green[300],
                           foregroundColor: Colors.black87,
                         ),
-                        child: Text("MBTI 유형 보기"),
+                        child: Text(
+                            "MBTI 유형 보기",
+                            style: TextStyle(fontSize: 16)
+                        ),
                       ),
                     ),
                     SizedBox(height: 10),
