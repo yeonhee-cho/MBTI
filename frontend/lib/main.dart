@@ -4,6 +4,7 @@ import 'package:frontend/common/constants.dart';
 import 'package:frontend/common/env_config.dart';
 import 'package:frontend/models/result_model.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/theme_provider.dart';
 import 'package:frontend/screens/history/result_detail_screen.dart';
 import 'package:frontend/screens/home/home_screen.dart';
 import 'package:frontend/screens/login/login_screen.dart';
@@ -41,8 +42,8 @@ Future<void> main() async {
   *   static String get kakaoMAPKey => dotenv.env['KAKAO_MAP_KEY'] ?? '';
   *
   *   빈 값이나 강제 대체값 처리 보다는 가져와야 하는 키를 무사히 불러올 수 있도록 로직 작성
-  * 
-  * 
+  *
+  *
   * ?? null이면 기본값 name ?? '기본프로필이미지.png'
   * ?. null이면 null 반환 name?.length 이름이 비어있으면 null
   * */
@@ -154,12 +155,45 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider())
       ],
-      child: MaterialApp.router(
-        title: AppConstants.appName,
-        debugShowCheckedModeBanner: false,
-        // 경로 설정에 대한 것은 : _router 라는 변수 이름을 참고해서 사용하거라
-        routerConfig: _router,
+      child:
+      Consumer<ThemeProvider> (
+        builder: (context, themeProvider, child) {
+          return MaterialApp.router(
+            title: AppConstants.appName,
+            debugShowCheckedModeBanner: false,
+            // 경로 설정에 대한 것은 : _router 라는 변수 이름을 참고해서 사용하거라
+            routerConfig: _router,
+
+            themeMode: themeProvider.themeMode,
+            // 라이트 모드 디자인
+            theme: ThemeData(
+              brightness: Brightness.light,
+              // ThemeData와 같이 색상 팔레트를 설정하는 속성에는
+              // 개발자가 작성한 변수명칭의 색상을 사용할 수 없음
+              // Material 에서 만든 색상만 가능
+              primarySwatch: Colors.blue,
+              // primarySwatch: AppColors.primary, //
+              scaffoldBackgroundColor: Colors.white,
+              appBarTheme: AppBarTheme(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              )
+            ),
+
+            // 다크 모드 디자인
+            darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                primarySwatch: Colors.indigo,
+                scaffoldBackgroundColor: Colors.grey[900],
+                appBarTheme: AppBarTheme(
+                  backgroundColor: Colors.grey[850],
+                  foregroundColor: Colors.white,
+                )
+            ),
+          );
+        }
       )
       /* 추후 라이트 테마 다크 테마
       * theme

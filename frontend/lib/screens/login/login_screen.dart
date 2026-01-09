@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/common/app_styles.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/services/api_service.dart';
 import 'package:go_router/go_router.dart';
@@ -172,7 +173,7 @@ class LoginScreenState extends State<LoginScreen> {
         child: Center(
           child : Container(
 
-            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+            padding: AppPadding.page,
 
           /* 4-3: Column으로 세로 배치 */
             child: Column(
@@ -180,18 +181,22 @@ class LoginScreenState extends State<LoginScreen> {
               children: [
                 /* 5: 각 위젯 구현 */
                 /* 5-1: 사용자 아이콘 추가 */
-                Icon(Icons.person, size: 100, color: Colors.blue),
+                Icon(
+                    Icons.person,
+                    size: AppIconSize.huge,
+                    color: AppColors.primary,
+                ),
                 /* 5-2: 간격 추가 */
-                SizedBox(height: 30),
+                AppSizedBox.h30,
 
                 /* 5-3: 안내 문구 Text 위젯 */
                 Text(
                     'MBTI 검사를 위해\n로그인해주세요',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: AppTextStyles.h3,
                     textAlign: TextAlign.center,
                 ),
                 /* 5-4: 간격 추가 */
-                SizedBox(height: 40),
+                AppSizedBox.h40,
 
                 /* 5-5: TextField 위젯 구현*/
                 // controller: _nameController 연결

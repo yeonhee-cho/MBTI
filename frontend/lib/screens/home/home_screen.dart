@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/constants.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/theme_provider.dart';
 import 'package:frontend/services/network_service.dart';
 import 'package:frontend/widgets/home/guest_section.dart';
 import 'package:frontend/widgets/home/profile_menu.dart';
@@ -199,9 +200,21 @@ class _HomeScreenState extends State<HomeScreen> {
             title: const Text("MBTI 유형 검사"),
             // const를 생략할 경우 매번 불러와서 무거워 질 수 있으나 빼도 상관 없음
             actions: [
+              // 테마 변경 스위치
+              Row(
+                children: [
+                  Icon(Icons.dark_mode, size: 20),
+                  Switch(
+                      value: context.watch<ThemeProvider>().isDarkMode,
+                      onChanged: (value) {
+                        context.read<ThemeProvider>().toggleTheme(value);
+                      }
+                  )
+                ],
+              ),
               // 로그인 상태에 따라 버튼 표시
               if (isLoggedIn)
-                // 분리된 프로필 메뉴 위젯에 
+                // 분리된 프로필 메뉴 위젯에
                 // userName 이라는 명칭으로 userName 내부 데이터 전달
                 // onLogout 이라는 명칭으로 _handleLogout 기능 전달
                 ProfileMenu(userName: userName, onLogout: _handleLogout)
